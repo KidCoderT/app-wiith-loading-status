@@ -25,6 +25,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var pendingIntent: PendingIntent
     private lateinit var action: NotificationCompat.Action
 
+    private var complete = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -32,9 +34,14 @@ class MainActivity : AppCompatActivity() {
 
         registerReceiver(receiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
 
-        custom_login_button.setOnClickListener {
+        custom_loading_button.setOnClickListener {
             download()
-            custom_login_button.hasCompletedDownload()
+            complete = true
+        }
+
+        if (complete) {
+            // call when download completed
+            custom_loading_button.hasCompletedDownload()
         }
     }
 

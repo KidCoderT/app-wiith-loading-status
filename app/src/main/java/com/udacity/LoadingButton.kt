@@ -19,13 +19,14 @@ class LoadingButton @JvmOverloads constructor(
     private var bgColor: Int = Color.BLACK
     private var textColor: Int = Color.BLACK // default color
 
+    // tells the compiler that the value of a variable
+    // must never be cached as its value may change outside
     @Volatile
     private var progress: Double = 0.0
+    private var valueAnimator: ValueAnimator
 
-    private var valueAnimator = ValueAnimator()
-
-    private var buttonState: ButtonState by Delegates.observable<ButtonState>(ButtonState.Completed) { p, old, new ->
-
+    // observes the state of button
+    private var buttonState: ButtonState by Delegates.observable(ButtonState.Completed) { p, old, new ->
     }
 
     private val updateListener = ValueAnimator.AnimatorUpdateListener {
@@ -43,6 +44,7 @@ class LoadingButton @JvmOverloads constructor(
         requestLayout()
     }
 
+    // initialize
     init {
         isClickable = true
         valueAnimator = AnimatorInflater.loadAnimator(
@@ -99,7 +101,6 @@ class LoadingButton @JvmOverloads constructor(
     private fun animation() {
         valueAnimator.start()
     }
-
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)

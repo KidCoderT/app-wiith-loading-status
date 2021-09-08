@@ -10,7 +10,7 @@
     tools:showIn="@layout/activity_main">
 
     <com.udacity.LoadingButton
-        android:id="@+id/custom_login_button"
+        android:id="@+id/custom_loading_button"
         android:layout_width="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
