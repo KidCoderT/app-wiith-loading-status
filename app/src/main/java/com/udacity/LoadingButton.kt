@@ -97,12 +97,6 @@ class LoadingButton @JvmOverloads constructor(
         isAntiAlias = true;
     }
 
-    // circle variables
-    private val cx = (width / 2).toFloat() + 250
-    private val cy = (height / 2).toFloat()
-    private val radius = 50;
-    private val oval = RectF(cx - radius, cy - radius, cx + radius, cy + radius);
-
     fun startDownload() {
         if (buttonState == ButtonState.Completed) buttonState = ButtonState.Loading
         animation()
@@ -129,6 +123,10 @@ class LoadingButton @JvmOverloads constructor(
             )
             paint.color = Color.parseColor("#F9A825")
 
+            val cx = (width / 2).toFloat() + 250
+            val cy = (height / 2).toFloat()
+            val radius = 50;
+            val oval = RectF(cx - radius, cy - radius, cx + radius, cy + radius);
             canvas.drawArc(oval, 0F, (360*(progress / 100)).toFloat(), true, arcPaint);
         }
 
