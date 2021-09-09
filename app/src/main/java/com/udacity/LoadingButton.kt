@@ -3,10 +3,7 @@ package com.udacity
 import android.animation.AnimatorInflater
 import android.animation.ValueAnimator
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Typeface
+import android.graphics.*
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
@@ -90,6 +87,22 @@ class LoadingButton @JvmOverloads constructor(
         typeface = Typeface.create("", Typeface.BOLD) // button text's font style
     }
 
+    private val arcPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        isDither = true;                    // set the dither to true
+        style = Paint.Style.FILL;       // set to STOKE
+        color = ContextCompat.getColor(context, R.color.colorAccent);
+        strokeJoin = Paint.Join.ROUND;    // set the join to round you want
+        strokeCap = Paint.Cap.ROUND;      // set the paint cap to round too
+        pathEffect = CornerPathEffect(50F);   // set the path effect when they join.
+        isAntiAlias = true;
+    }
+
+    // circle variables
+    private val cx = (width / 2).toFloat() + 250
+    private val cy = (height / 2).toFloat()
+    private val radius = 50;
+    private val oval = RectF(cx - radius, cy - radius, cx + radius, cy + radius);
+
     fun startDownload() {
         if (buttonState == ButtonState.Completed) buttonState = ButtonState.Loading
         animation()
@@ -114,13 +127,15 @@ class LoadingButton @JvmOverloads constructor(
                 0f, 0f,
                 (width * (progress / 100)).toFloat(), height.toFloat(), paint
             )
+            paint.color = Color.parseColor("#F9A825")
+
+            canvas.drawArc(oval, 0F, (360*(progress / 100)).toFloat(), true, arcPaint);
         }
+
         // check the button state
         val buttonText = if (buttonState == ButtonState.Loading)
             resources.getString(R.string.loading)  // We are loading as button text
         else resources.getString(R.string.download)// download as button text
-
-        Log.i("Sup", "$buttonState")
 
         // write the text on custom button
         paint.color = textColor
