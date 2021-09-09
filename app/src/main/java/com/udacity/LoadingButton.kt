@@ -93,7 +93,7 @@ class LoadingButton @JvmOverloads constructor(
         color = ContextCompat.getColor(context, R.color.colorAccent);
         strokeJoin = Paint.Join.ROUND;    // set the join to round you want
         strokeCap = Paint.Cap.ROUND;      // set the paint cap to round too
-        pathEffect = CornerPathEffect(50F);   // set the path effect when they join.
+        // TODO: Understand what strokeJoin strokeCap and pathEffect does
         isAntiAlias = true;
     }
 
