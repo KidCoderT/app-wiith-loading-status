@@ -52,6 +52,7 @@ class MainActivity : AppCompatActivity() {
             if (id == downloadID) {
                 custom_loading_button.hasCompletedDownload()
             }
+            Log.i("Sup", "${DownloadManager.COLUMN_ID}")
         }
     }
 
