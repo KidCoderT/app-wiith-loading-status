@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import kotlin.properties.Delegates
@@ -121,6 +122,8 @@ class LoadingButton @JvmOverloads constructor(
         val buttonText = if (buttonState == ButtonState.Loading)
             resources.getString(R.string.loading)  // We are loading as button text
         else resources.getString(R.string.download)// download as button text
+
+        Log.i("Sup", "$buttonState")
 
         // write the text on custom button
         paint.color = textColor

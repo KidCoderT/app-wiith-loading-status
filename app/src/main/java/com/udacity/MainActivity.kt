@@ -25,8 +25,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var pendingIntent: PendingIntent
     private lateinit var action: NotificationCompat.Action
 
-    private var complete = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -36,12 +34,6 @@ class MainActivity : AppCompatActivity() {
 
         custom_loading_button.setOnClickListener {
             download()
-            complete = true
-        }
-
-        if (complete) {
-            // call when download completed
-            custom_loading_button.hasCompletedDownload()
         }
     }
 
@@ -63,6 +55,7 @@ class MainActivity : AppCompatActivity() {
         val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
         downloadID =
             downloadManager.enqueue(request)// enqueue puts the download request in the queue.
+        custom_loading_button.hasCompletedDownload()
     }
 
     companion object {
