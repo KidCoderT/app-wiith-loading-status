@@ -90,12 +90,9 @@ class LoadingButton @JvmOverloads constructor(
         typeface = Typeface.create("", Typeface.BOLD) // button text's font style
     }
 
-    override fun performClick(): Boolean {
-        super.performClick()
+    fun startDownload() {
         if (buttonState == ButtonState.Completed) buttonState = ButtonState.Loading
         animation()
-
-        return true
     }
 
     // start the animation when button is clicked
