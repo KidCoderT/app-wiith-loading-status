@@ -14,14 +14,11 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
-import java.util.jar.Manifest
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,6 +28,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var pendingIntent: PendingIntent
     private lateinit var action: NotificationCompat.Action
 
+    private var filename = ""
+    private var url =  ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -38,13 +38,23 @@ class MainActivity : AppCompatActivity() {
 
         registerReceiver(receiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
 
-        custom_loading_button.setOnClickListener {
-            val url = when(radio_group.checkedRadioButtonId) {
-                2131230865 -> "https://github.com/bumptech/glide"
-                2131230896 -> "https://github.com/udacity/nd940-c3-advanced-android-programming-project-starter"
-                2131230934 -> "https://github.com/square/retrofit"
+        radio_group.setOnCheckedChangeListener { _, checkedId ->
+            filename = when(checkedId) {
+                R.id.glide_download -> "Glide - Image Loading Library by BumpTech"
+                R.id.load_app_download -> "LoadApp - Current repository by Udacity"
+                R.id.retrofit_download -> "Retrofit - Type-safe HTTP client for Android and Java by Square, Inc"
                 else -> ""
             }
+            url = when(checkedId) {
+                R.id.glide_download -> "https://github.com/bumptech/glide"
+                R.id.load_app_download -> "https://github.com/udacity/nd940-c3-advanced-android-programming-project-starter"
+                R.id.retrofit_download -> "https://github.com/square/retrofit"
+                else -> ""
+            }
+        }
+
+        custom_loading_button.setOnClickListener {
+            Log.i("Sup", "$filename $url")
             download(url)
         }
 
@@ -57,12 +67,11 @@ class MainActivity : AppCompatActivity() {
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
+            custom_loading_button.hasCompletedDownload()
             if (id == downloadID) {
-                custom_loading_button.hasCompletedDownload()
-                if (context != null) {
-                    globalDownloadId = downloadID
-                    sendNotification(context)
-                }
+                sendNotification(applicationContext, "Success")
+            } else {
+                sendNotification(applicationContext, "Failed")
             }
         }
     }
@@ -109,7 +118,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun sendNotification(context: Context) {
+    private fun sendNotification(context: Context, status: String) {
         val notificationManager = ContextCompat.getSystemService(
             this,
             NotificationManager::class.java
@@ -118,11 +127,9 @@ class MainActivity : AppCompatActivity() {
 
         notificationManager.sendNotification(
             context.getText(R.string.notification_description).toString(),
+            filename,
+            status,
             context
         )
-    }
-
-    companion object {
-        var globalDownloadId: Long = 0
     }
 }

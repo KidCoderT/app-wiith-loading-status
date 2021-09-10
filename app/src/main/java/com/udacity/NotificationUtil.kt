@@ -10,9 +10,11 @@ private val NOTIFICATION_ID = 0
 private val REQUEST_CODE = 0
 private val FLAGS = 1
 
-fun NotificationManager.sendNotification(messageBody: String, applicationContext: Context) {
+fun NotificationManager.sendNotification(messageBody: String, filename: String, downloadStatus: String, applicationContext: Context) {
 
     val detailActivityIntent = Intent(applicationContext, DetailActivity::class.java)
+        .putExtra("filename", filename)
+        .putExtra("downloadStatus", downloadStatus)
 
     val detailActivityPendingIntent = PendingIntent.getActivity(
         applicationContext,
