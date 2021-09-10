@@ -11,4 +11,6 @@
     <string name="title_activity_detail">DetailActivity</string>
     <string name="loading">We are loading</string>
     <string name="download">Download</string>
+    <string name="download_notification_channel_id">download_channel</string>
+    <string name="download_notification_channel_name">Download</string>
 </resources>

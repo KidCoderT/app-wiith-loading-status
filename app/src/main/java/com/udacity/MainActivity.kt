@@ -1,12 +1,14 @@
 package com.udacity
 
 import android.app.DownloadManager
+import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -16,6 +18,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import java.util.jar.Manifest
@@ -44,6 +47,11 @@ class MainActivity : AppCompatActivity() {
             }
             download(url)
         }
+
+        createChannel(
+            getString(R.string.download_notification_channel_id),
+            getString(R.string.download_notification_channel_name)
+        )
     }
 
     private val receiver = object : BroadcastReceiver() {
@@ -51,8 +59,11 @@ class MainActivity : AppCompatActivity() {
             val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
             if (id == downloadID) {
                 custom_loading_button.hasCompletedDownload()
+                if (context != null) {
+                    globalDownloadId = downloadID
+                    sendNotification(context)
+                }
             }
-            Log.i("Sup", "${DownloadManager.COLUMN_ID}")
         }
     }
 
@@ -75,8 +86,43 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    companion object {
-        private const val CHANNEL_ID = "channelId"
+    private fun createChannel(channelId: String, channelName: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationChannel = NotificationChannel(
+                channelId,
+                channelName,
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+                .apply {
+                    setShowBadge(false)
+                }
+
+            notificationChannel.enableLights(true)
+            notificationChannel.lightColor = Color.RED
+            notificationChannel.enableVibration(true)
+            notificationChannel.description = "Download Finished"
+
+            val notificationManager = this.getSystemService(
+                NotificationManager::class.java
+            )
+            notificationManager.createNotificationChannel(notificationChannel)
+        }
     }
 
+    private fun sendNotification(context: Context) {
+        val notificationManager = ContextCompat.getSystemService(
+            this,
+            NotificationManager::class.java
+        ) as NotificationManager
+        notificationManager.cancelNotifications()
+
+        notificationManager.sendNotification(
+            context.getText(R.string.notification_description).toString(),
+            context
+        )
+    }
+
+    companion object {
+        var globalDownloadId: Long = 0
+    }
 }
