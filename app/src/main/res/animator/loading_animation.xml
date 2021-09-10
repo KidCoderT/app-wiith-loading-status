@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- I did not make it go till 100 so as to keep the suspense that the download was still happening
+and when the download is over they think it just finished -->
 <animator
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:duration="2000"

@@ -54,7 +54,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         custom_loading_button.setOnClickListener {
-            Log.i("Sup", "$filename $url")
             download(url)
         }
 
@@ -67,17 +66,18 @@ class MainActivity : AppCompatActivity() {
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
-            custom_loading_button.hasCompletedDownload()
             if (id == downloadID) {
                 sendNotification(applicationContext, "Success")
             } else {
                 sendNotification(applicationContext, "Failed")
             }
+            custom_loading_button.stopButtonAnimation()
         }
     }
 
     private fun download(URL: String) {
         if (URL.isNotBlank()) {
+            custom_loading_button.hasSelectedDownloadItem = true
             val request =
                 DownloadManager.Request(Uri.parse(URL))
                     .setTitle(getString(R.string.app_name))
@@ -89,10 +89,10 @@ class MainActivity : AppCompatActivity() {
             val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
             downloadID =
                 downloadManager.enqueue(request)// enqueue puts the download request in the queue.
-            custom_loading_button.startDownload()
         } else {
             Toast.makeText(applicationContext, "Please select the file download", Toast.LENGTH_SHORT).show()
         }
+        custom_loading_button.startAnimation()
     }
 
     private fun createChannel(channelId: String, channelName: String) {

@@ -33,7 +33,7 @@ fun NotificationManager.sendNotification(messageBody: String, filename: String, 
         .setContentText(messageBody)
         .addAction(
             R.drawable.cloud_download,
-            applicationContext.getString(R.string.notification_button),
+            applicationContext.getString(R.string.notification_button_text),
             detailActivityPendingIntent
         )
         .setAutoCancel(true)

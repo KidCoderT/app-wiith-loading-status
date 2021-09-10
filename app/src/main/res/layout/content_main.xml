@@ -34,7 +34,9 @@
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:bgColor="@color/colorPrimary"
+        app:textColor="@color/white"/>
 
     <RadioGroup
         android:id="@+id/radio_group"

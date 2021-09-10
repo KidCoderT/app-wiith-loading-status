@@ -2,6 +2,7 @@ package com.udacity
 
 import android.app.DownloadManager
 import android.database.Cursor
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +19,10 @@ class DetailActivity : AppCompatActivity() {
 
         filename_text.text = intent.getStringExtra("filename")
         status_text.text = intent.getStringExtra("downloadStatus")
+        when (status_text.text) {
+            "Success" -> status_text.setTextColor(Color.GREEN)
+            else -> status_text.setTextColor(Color.RED)
+        }
         ok_button.setOnClickListener {
             onBackPressed()
         }
